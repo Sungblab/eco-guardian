@@ -37,7 +37,7 @@
         class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between"
       >
         <h1 class="text-2xl font-bold text-[#2F855A] title-font">
-          완도고 환경 지킴이
+          🌱 완도고 환경 지킴이
         </h1>
       </div>
     </header>
@@ -168,34 +168,6 @@
             await loadNotifications(); // 목록 새로고침
           } catch (err) {
             console.error("전체 알림 읽음 처리 실패:", err);
-          }
-        });
-
-      // 로그아웃 처리
-      document
-        .getElementById("logoutBtn")
-        .addEventListener("click", async () => {
-          try {
-            const token = localStorage.getItem("accessToken");
-            const refreshToken = localStorage.getItem("refreshToken");
-
-            await fetch("http://localhost:3000/api/auth/logout", {
-              method: "POST",
-              headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ refreshToken }),
-            });
-
-            localStorage.removeItem("accessToken");
-            localStorage.removeItem("refreshToken");
-            localStorage.removeItem("userRole");
-
-            window.location.href = "login.html";
-          } catch (err) {
-            console.error("로그아웃 실패:", err);
-            alert("로그아웃 처리 중 오류가 발생했습니다.");
           }
         });
 

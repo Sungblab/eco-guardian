@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>프로필 - 완도고 환경 지킴이</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poor+Story&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Gaegu&display=swap");
+
+      body {
+        font-family: "Poor Story", "Gaegu", sans-serif;
+        background-color: #f5f7f4;
+        letter-spacing: -0.02em;
+      }
+
+      .title-font {
+        font-family: "Gaegu", "Poor Story", sans-serif;
+      }
+
+      .eco-gradient {
+        background: linear-gradient(120deg, #4ade80 0%, #60a5fa 100%);
+      }
+    </style>
+  </head>
+  <body class="bg-[#F5F7F4]">
+    <!-- 상단 헤더 -->
+    <header
+      class="bg-white/80 backdrop-blur-md shadow-sm fixed top-0 w-full z-10"
+    >
+      <div
+        class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between"
+      >
+        <h1 class="text-2xl font-bold text-[#2F855A] title-font">
+          🌱 완도고 환경 지킴이
+        </h1>
+        <a href="notification.html" class="p-2 relative">
+          <i class="fas fa-bell text-[#2F855A]"></i>
+          <span
+            class="absolute top-1 right-1 bg-[#F59E0B] rounded-full w-2 h-2 hidden"
+          ></span>
+        </a>
+      </div>
+    </header>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="min-h-screen pt-24 px-4 pb-20">
+      <div class="max-w-md mx-auto space-y-8">
+        <!-- 프로필 정보 -->
+        <div
+          class="bg-white/80 backdrop-blur p-8 rounded-3xl shadow-lg border border-green-100 space-y-6"
+        >
+          <h2 class="text-xl font-bold text-[#2F855A]">기본 정보</h2>
+          <div class="space-y-4">
+            <div>
+              <label class="text-sm text-gray-500">학번</label>
+              <p id="studentId" class="text-lg font-bold text-gray-900"></p>
+            </div>
+            <div>
+              <label class="text-sm text-gray-500">이름</label>
+              <p id="studentName" class="text-lg font-bold text-gray-900"></p>
+            </div>
+            <div class="pt-2 grid grid-cols-2 gap-4">
+              <a
+                href="change-password.html"
+                class="text-center text-sm py-2 px-3 rounded-lg bg-[#2F855A] text-white hover:bg-[#4ADE80] transition-colors"
+              >
+                비밀번호 변경
+              </a>
+              <button
+                id="logoutBtn"
+                class="w-full text-sm py-2 px-3 rounded-lg border border-red-500 text-red-500 hover:bg-red-50 transition-colors"
+              >
+                로그아웃
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 활동 통계 -->
+        <div
+          class="bg-white/80 backdrop-blur p-8 rounded-3xl shadow-lg border border-green-100 space-y-6"
+        >
+          <h2 class="text-xl font-bold text-[#2F855A]">활동 통계</h2>
+          <div class="grid grid-cols-2 gap-6">
+            <div>
+              <label class="text-sm text-gray-500">전체 인증 횟수</label>
+              <p id="totalActivities" class="text-lg font-bold text-[#4ADE80]">
+                0회
+              </p>
+            </div>
+            <div>
+              <label class="text-sm text-gray-500">연속 참여일</label>
+              <p id="streak" class="text-lg font-bold text-[#4ADE80]">0일</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 최근 활동 -->
+        <div
+          class="bg-white/80 backdrop-blur p-8 rounded-3xl shadow-lg border border-green-100 space-y-6"
+        >
+          <h2 class="text-xl font-bold text-[#2F855A]">최근 활동</h2>
+          <ul id="recentActivities" class="space-y-4">
+            <!-- 여기에 최근 활동이 동적으로 추가됩니다 -->
+          </ul>
+        </div>
+      </div>
+    </main>
+
+    <!-- 하단 네비게이션 -->
+    <nav
+      class="fixed bottom-0 w-full bg-white/80 backdrop-blur shadow-lg rounded-t-2xl border-t border-green-100"
+    >
+      <div class="flex justify-around items-center h-16 max-w-7xl mx-auto px-4">
+        <a href="index.html" class="flex flex-col items-center text-gray-400">
+          <i class="fas fa-home text-xl mb-0.5"></i>
+          <span class="text-xs">홈</span>
+        </a>
+        <a
+          href="profile.html"
+          class="flex flex-col items-center text-[#2F855A]"
+        >
+          <i class="fas fa-user text-xl mb-0.5"></i>
+          <span class="text-xs">프로필</span>
+        </a>
+      </div>
+    </nav>
+
+    <script>
+      // 페이지 로드 시 인증 확인 및 프로필 정보 로드
+      document.addEventListener("DOMContentLoaded", async () => {
+        const token = localStorage.getItem("accessToken");
+        if (!token) {
+          window.location.href = "login.html";
+          return;
+        }
+
+        await Promise.all([loadUserStats(), checkNotifications()]);
+
+        // 5분마다 알림 상태 업데이트
+        setInterval(checkNotifications, 300000);
+      });
+
+      // 사용자 통계 로드
+      async function loadUserStats() {
+        try {
+          const token = localStorage.getItem("accessToken");
+          const [statsResponse, activitiesResponse] = await Promise.all([
+            fetch("http://127.0.0.1:3000/api/users/stats/me", {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }),
+            fetch("http://127.0.0.1:3000/api/activities?limit=5", {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }),
+          ]);
+
+          if (!statsResponse.ok || !activitiesResponse.ok) {
+            if (
+              statsResponse.status === 401 ||
+              activitiesResponse.status === 401
+            ) {
+              localStorage.removeItem("accessToken");
+              window.location.href = "login.html";
+              return;
+            }
+            throw new Error("데이터 조회 실패");
+          }
+
+          const [statsData, activitiesData] = await Promise.all([
+            statsResponse.json(),
+            activitiesResponse.json(),
+          ]);
+
+          // 기본 정보 표시
+          document.getElementById("studentId").textContent =
+            statsData.user.studentId;
+          document.getElementById("studentName").textContent =
+            statsData.user.name;
+
+          // 활동 통계 표시
+          document.getElementById(
+            "totalActivities"
+          ).textContent = `${statsData.personalStats.totalApproved}회`;
+          document.getElementById(
+            "streak"
+          ).textContent = `${statsData.personalStats.streak}일`;
+
+          // 최근 활동 표시
+          const recentActivitiesList =
+            document.getElementById("recentActivities");
+          if (activitiesData.activities.length === 0) {
+            recentActivitiesList.innerHTML = `
+              <li class="text-center text-gray-500 py-4">
+                아직 활동 내역이 없습니다
+              </li>
+            `;
+          } else {
+            recentActivitiesList.innerHTML = activitiesData.activities
+              .map((activity) => createActivityItem(activity))
+              .join("");
+          }
+        } catch (err) {
+          console.error("데이터 로드 실패:", err);
+          if (err.message.includes("토큰")) {
+            window.location.href = "login.html";
+          } else {
+            alert("정보를 불러오는데 실패했습니다.");
+          }
+        }
+      }
+
+      // 활동 상태 텍스트 변환
+      function getStatusText(status) {
+        switch (status) {
+          case "pending":
+            return "승인 대기중";
+          case "approved":
+            return "승인됨";
+          case "rejected":
+            return "거절됨";
+          default:
+            return status;
+        }
+      }
+
+      // 활동 아이템 생성 함수
+      function createActivityItem(activity) {
+        const statusColors = {
+          pending: "text-yellow-600",
+          approved: "text-green-600",
+          rejected: "text-red-600",
+        };
+
+        return `
+          <li class="p-4 bg-green-50/50 rounded-xl">
+            <div class="flex items-center justify-between">
+              <h3 class="text-lg font-bold text-[#2F855A]">${
+                activity.category
+              }</h3>
+              <span class="text-sm ${
+                statusColors[activity.status] || "text-gray-500"
+              }">
+                ${getStatusText(activity.status)}
+              </span>
+            </div>
+            <p class="mt-2 text-sm text-gray-500">
+              ${new Date(activity.createdAt).toLocaleDateString()}
+            </p>
+          </li>
+        `;
+      }
+
+      // 로그아웃 처리 함수 수정
+      document
+        .getElementById("logoutBtn")
+        .addEventListener("click", async () => {
+          try {
+            const token = localStorage.getItem("accessToken");
+            const refreshToken = localStorage.getItem("refreshToken");
+
+            // 서버에 로그아웃 요청
+            const response = await fetch(
+              "http://127.0.0.1:3000/api/auth/logout",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ refreshToken }),
+              }
+            );
+
+            // 로컬 스토리지 토큰 삭제 (응답 상태와 관계없이 실행)
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("refreshToken");
+
+            // 로그인 페이지로 이동
+            window.location.href = "login.html";
+          } catch (err) {
+            console.error("로그아웃 오류:", err);
+            // 오류가 발생해도 로컬 스토리지를 비우고 로그인 페이지로 이동
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("refreshToken");
+            window.location.href = "login.html";
+          }
+        });
+
+      // 알림 상태 확인 함수
+      async function checkNotifications() {
+        try {
+          const token = localStorage.getItem("accessToken");
+          if (!token) {
+            return;
+          }
+
+          const response = await fetch(
+            "http://localhost:3000/api/notifications",
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error("알림 조회 실패");
+          }
+
+          const data = await response.json();
+          const notificationDot = document.querySelector(
+            "[class*='bg-\\[#F59E0B\\]']"
+          );
+          const notificationBadge = document.querySelector(
+            "#notification-badge"
+          );
+
+          if (notificationDot) {
+            notificationDot.style.display =
+              data.unreadCount > 0 ? "block" : "none";
+          }
+
+          // 알림 개수 표시 배지 추가
+          if (data.unreadCount > 0) {
+            if (!notificationBadge) {
+              const badge = document.createElement("span");
+              badge.id = "notification-badge";
+              badge.className =
+                "absolute -top-1 -right-1 bg-[#F59E0B] text-white text-xs rounded-full w-4 h-4 flex items-center justify-center";
+              badge.textContent = data.unreadCount;
+              document
+                .querySelector("a[href='notification.html']")
+                .appendChild(badge);
+            } else {
+              notificationBadge.textContent = data.unreadCount;
+            }
+          } else if (notificationBadge) {
+            notificationBadge.remove();
+          }
+        } catch (err) {
+          console.error("알림 상태 확인 실패:", err);
+        }
+      }
+    </script>
+  </body>
+</html>

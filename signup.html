@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>회원가입 - 완도고 환경 지킴이</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poor+Story&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Gaegu&display=swap");
+
+      body {
+        font-family: "Poor Story", "Gaegu", sans-serif;
+        background-color: #f5f7f4;
+        letter-spacing: -0.02em;
+      }
+
+      .title-font {
+        font-family: "Gaegu", "Poor Story", sans-serif;
+      }
+
+      .eco-gradient {
+        background: linear-gradient(120deg, #4ade80 0%, #60a5fa 100%);
+      }
+    </style>
+  </head>
+  <body class="bg-[#F5F7F4]">
+    <!-- 상단 헤더 -->
+    <header
+      class="bg-white/80 backdrop-blur-md shadow-sm fixed top-0 w-full z-10"
+    >
+      <div
+        class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between"
+      >
+        <h1 class="text-2xl font-bold text-[#2F855A] title-font">
+          완도고 환경 지킴이
+        </h1>
+      </div>
+    </header>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="min-h-screen pt-24 px-4 pb-20">
+      <div class="max-w-md mx-auto space-y-8">
+        <div>
+          <h2 class="text-2xl font-bold text-center text-[#2F855A] title-font">
+            환영합니다
+          </h2>
+          <p class="mt-2 text-center text-gray-600">환경을 지키는 작은 실천</p>
+        </div>
+
+        <form class="mt-8 space-y-6" id="signupForm">
+          <div
+            class="bg-white/80 backdrop-blur p-8 rounded-3xl shadow-lg border border-green-100 space-y-6"
+          >
+            <!-- 학번 입력 -->
+            <div>
+              <label
+                for="studentId"
+                class="block text-lg font-bold text-[#2F855A] mb-2"
+                >학번</label
+              >
+              <input
+                id="studentId"
+                name="studentId"
+                type="text"
+                required
+                pattern="[0-9]{4}"
+                maxlength="4"
+                class="w-full px-4 py-3 rounded-xl border border-green-200 focus:outline-none focus:ring-2 focus:ring-[#4ADE80] focus:border-transparent bg-white/50"
+                placeholder="학번 4자리를 입력하세요"
+              />
+            </div>
+
+            <!-- 이름 입력 -->
+            <div>
+              <label
+                for="name"
+                class="block text-lg font-bold text-[#2F855A] mb-2"
+                >이름</label
+              >
+              <input
+                id="name"
+                name="name"
+                type="text"
+                required
+                minlength="2"
+                maxlength="10"
+                class="w-full px-4 py-3 rounded-xl border border-green-200 focus:outline-none focus:ring-2 focus:ring-[#4ADE80] focus:border-transparent bg-white/50"
+                placeholder="이름을 입력하세요"
+              />
+            </div>
+
+            <!-- 비밀번호 입력 -->
+            <div>
+              <label
+                for="password"
+                class="block text-lg font-bold text-[#2F855A] mb-2"
+                >비밀번호</label
+              >
+              <input
+                id="password"
+                name="password"
+                type="password"
+                required
+                class="w-full px-4 py-3 rounded-xl border border-green-200 focus:outline-none focus:ring-2 focus:ring-[#4ADE80] focus:border-transparent bg-white/50"
+                placeholder="비밀번호 (8자 이상)"
+              />
+            </div>
+
+            <!-- 비밀번호 확인 -->
+            <div>
+              <label
+                for="passwordConfirm"
+                class="block text-lg font-bold text-[#2F855A] mb-2"
+                >비밀번호 확인</label
+              >
+              <input
+                id="passwordConfirm"
+                name="passwordConfirm"
+                type="password"
+                required
+                class="w-full px-4 py-3 rounded-xl border border-green-200 focus:outline-none focus:ring-2 focus:ring-[#4ADE80] focus:border-transparent bg-white/50"
+                placeholder="비밀번호를 다시 입력하세요"
+              />
+            </div>
+          </div>
+
+          <!-- 회원가입 버튼 -->
+          <button
+            type="submit"
+            class="w-full py-3 px-4 rounded-xl text-white font-bold eco-gradient hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4ADE80]"
+          >
+            회원가입하기
+          </button>
+
+          <!-- 로그인 링크 -->
+          <div class="text-center">
+            <p class="text-gray-600">
+              이미 계정이 있으신가요?
+              <a
+                href="login.html"
+                class="font-bold text-[#2F855A] hover:text-[#4ADE80]"
+              >
+                로그인
+              </a>
+            </p>
+          </div>
+        </form>
+      </div>
+    </main>
+
+    <!-- 하단 네비게이션 -->
+    <nav
+      class="fixed bottom-0 w-full bg-white/80 backdrop-blur shadow-lg rounded-t-2xl border-t border-green-100"
+    >
+      <div class="flex justify-around items-center h-16 max-w-7xl mx-auto px-4">
+        <a href="index.html" class="flex flex-col items-center text-gray-400">
+          <i class="fas fa-home text-xl mb-0.5"></i>
+          <span class="text-xs">홈</span>
+        </a>
+        <a href="profile.html" class="flex flex-col items-center text-gray-400">
+          <i class="fas fa-user text-xl mb-0.5"></i>
+          <span class="text-xs">프로필</span>
+        </a>
+      </div>
+    </nav>
+
+    <script>
+      document
+        .getElementById("signupForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const studentId = document.getElementById("studentId").value;
+          const name = document.getElementById("name").value;
+          const password = document.getElementById("password").value;
+          const passwordConfirm =
+            document.getElementById("passwordConfirm").value;
+
+          // 학번 유효성 검사
+          if (!/^\d{4}$/.test(studentId)) {
+            alert("학번은 4자리 숫자여야 합니다.");
+            return;
+          }
+
+          // 이름 유효성 검사
+          if (name.length < 2 || name.length > 10) {
+            alert("이름은 2자에서 10자 사이여야 합니다.");
+            return;
+          }
+
+          // 비밀번호 유효성 검사
+          if (password.length < 8) {
+            alert("비밀번호는 8자 이상이어야 합니다.");
+            return;
+          }
+
+          if (password !== passwordConfirm) {
+            alert("비밀번호가 일치하지 않습니다.");
+            return;
+          }
+
+          try {
+            const response = await fetch(
+              "http://localhost:3000/api/auth/register",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Accept: "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify({ studentId, name, password }),
+              }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+              throw new Error(data.message || "회원가입에 실패했습니다.");
+            }
+
+            alert("회원가입이 완료되었습니다. 로그인 페이지로 이동합니다.");
+            window.location.href = "login.html";
+          } catch (err) {
+            console.error("회원가입 오류:", err);
+            alert(err.message || "회원가입 처리 중 오류가 발생했습니다.");
+          }
+        });
+    </script>
+  </body>
+</html>

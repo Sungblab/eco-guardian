@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>로그인 - 완도고 환경 지킴이</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poor+Story&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Gaegu&display=swap");
+
+      body {
+        font-family: "Poor Story", "Gaegu", sans-serif;
+        background-color: #f5f7f4;
+        letter-spacing: -0.02em;
+      }
+
+      .title-font {
+        font-family: "Gaegu", "Poor Story", sans-serif;
+      }
+
+      .eco-gradient {
+        background: linear-gradient(120deg, #4ade80 0%, #60a5fa 100%);
+      }
+    </style>
+  </head>
+  <body class="bg-[#F5F7F4]">
+    <!-- 상단 헤더 -->
+    <header
+      class="bg-white/80 backdrop-blur-md shadow-sm fixed top-0 w-full z-10"
+    >
+      <div
+        class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between"
+      >
+        <h1 class="text-2xl font-bold text-[#2F855A] title-font">
+          완도고 환경 지킴이
+        </h1>
+      </div>
+    </header>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="min-h-screen pt-24 px-4 pb-20">
+      <div class="max-w-md mx-auto space-y-8">
+        <div>
+          <h2 class="text-2xl font-bold text-center text-[#2F855A] title-font">
+            환영합니다
+          </h2>
+          <p class="mt-2 text-center text-gray-600">환경을 지키는 작은 실천</p>
+        </div>
+
+        <form class="mt-8 space-y-6" id="loginForm">
+          <!-- 로그인 폼 -->
+          <div
+            class="bg-white/80 backdrop-blur p-8 rounded-3xl shadow-lg border border-green-100 space-y-6"
+          >
+            <!-- 학번 입력 -->
+            <div>
+              <label
+                for="studentId"
+                class="block text-lg font-bold text-[#2F855A] mb-2"
+                >학번</label
+              >
+              <input
+                id="studentId"
+                name="studentId"
+                type="text"
+                required
+                class="w-full px-4 py-3 rounded-xl border border-green-200 focus:outline-none focus:ring-2 focus:ring-[#4ADE80] focus:border-transparent bg-white/50"
+                placeholder="학번을 입력하세요"
+              />
+            </div>
+
+            <!-- 비밀번호 입력 -->
+            <div>
+              <label
+                for="password"
+                class="block text-lg font-bold text-[#2F855A] mb-2"
+                >비밀번호</label
+              >
+              <input
+                id="password"
+                name="password"
+                type="password"
+                required
+                class="w-full px-4 py-3 rounded-xl border border-green-200 focus:outline-none focus:ring-2 focus:ring-[#4ADE80] focus:border-transparent bg-white/50"
+                placeholder="비밀번호를 입력하세요"
+              />
+            </div>
+
+            <!-- 비밀번호 찾기 링크 -->
+            <div class="text-right">
+              <a
+                href="find-password.html"
+                class="text-[#2F855A] hover:text-[#4ADE80]"
+              >
+                비밀번호를 잊으셨나요?
+              </a>
+            </div>
+
+            <!-- 비밀번호 입력 다음에 추가 -->
+            <div class="flex items-center">
+              <input
+                id="keepLoggedIn"
+                name="keepLoggedIn"
+                type="checkbox"
+                class="h-4 w-4 text-[#4ADE80] focus:ring-[#4ADE80] border-green-200 rounded"
+              />
+              <label for="keepLoggedIn" class="ml-2 block text-gray-600">
+                로그인 상태 유지
+              </label>
+            </div>
+          </div>
+
+          <!-- 로그인 버튼 -->
+          <button
+            type="submit"
+            class="w-full py-3 px-4 rounded-xl text-white font-bold eco-gradient hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4ADE80]"
+          >
+            로그인하기
+          </button>
+
+          <!-- 회원가입 링크 -->
+          <div class="text-center">
+            <p class="text-gray-600">
+              아직 회원이 아니신가요?
+              <a
+                href="signup.html"
+                class="font-bold text-[#2F855A] hover:text-[#4ADE80]"
+              >
+                회원가입
+              </a>
+            </p>
+          </div>
+        </form>
+      </div>
+    </main>
+
+    <!-- 하단 네비게이션 -->
+    <nav
+      class="fixed bottom-0 w-full bg-white/80 backdrop-blur shadow-lg rounded-t-2xl border-t border-green-100"
+    >
+      <div class="flex justify-around items-center h-16 max-w-7xl mx-auto px-4">
+        <a href="index.html" class="flex flex-col items-center text-gray-400">
+          <i class="fas fa-home text-xl mb-0.5"></i>
+          <span class="text-xs">홈</span>
+        </a>
+        <a href="profile.html" class="flex flex-col items-center text-gray-400">
+          <i class="fas fa-user text-xl mb-0.5"></i>
+          <span class="text-xs">프로필</span>
+        </a>
+      </div>
+    </nav>
+
+    <script>
+      // 페이지 로드 시 이미 로그인되어 있는지 확인
+      document.addEventListener("DOMContentLoaded", () => {
+        const token = localStorage.getItem("accessToken");
+        const keepLoggedIn = localStorage.getItem("keepLoggedIn");
+
+        if (token && keepLoggedIn === "true") {
+          window.location.href = "index.html";
+        } else {
+          // 로그인 유지가 체크되어 있지 않으면 토큰 삭제
+          localStorage.removeItem("accessToken");
+          localStorage.removeItem("refreshToken");
+          localStorage.removeItem("userRole");
+        }
+      });
+
+      // 로그인 폼 제출 처리
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const studentId = document.getElementById("studentId").value;
+          const password = document.getElementById("password").value;
+          const keepLoggedIn = document.getElementById("keepLoggedIn").checked;
+
+          try {
+            const response = await fetch(
+              "http://127.0.0.1:3000/api/auth/login",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ studentId, password }),
+              }
+            );
+
+            const data = await response.json();
+
+            if (response.ok) {
+              localStorage.setItem("accessToken", data.accessToken);
+              localStorage.setItem("refreshToken", data.refreshToken);
+              localStorage.setItem("userRole", data.role);
+              localStorage.setItem("keepLoggedIn", keepLoggedIn);
+
+              if (data.role === "admin") {
+                window.location.href = "admin.html";
+              } else {
+                window.location.href = "index.html";
+              }
+            } else {
+              alert(data.message || "로그인에 실패했습니다.");
+            }
+          } catch (err) {
+            console.error("로그인 오류:", err);
+            alert("로그인 처리 중 오류가 발생했습니다.");
+          }
+        });
+    </script>
+  </body>
+</html>

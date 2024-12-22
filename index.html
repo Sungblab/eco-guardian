@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>완도고 환경 지킴이 - 탄소중립 실천 프로젝트</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poor+Story&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Gaegu&display=swap");
+
+      body {
+        font-family: "Poor Story", "Gaegu", sans-serif;
+        background-color: #f5f7f4;
+        letter-spacing: -0.02em;
+      }
+
+      .title-font {
+        font-family: "Gaegu", "Poor Story", sans-serif;
+      }
+
+      .eco-gradient {
+        background: linear-gradient(120deg, #4ade80 0%, #60a5fa 100%);
+      }
+
+      .eco-card {
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .eco-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          45deg,
+          transparent 48%,
+          rgba(255, 255, 255, 0.1) 50%,
+          transparent 52%
+        );
+        transform: translateX(-100%);
+        transition: transform 0.6s;
+      }
+
+      .eco-card:hover::before {
+        transform: translateX(100%);
+      }
+
+      .eco-card:active {
+        transform: scale(0.98);
+      }
+    </style>
+  </head>
+  <body class="bg-[#F5F7F4] pb-20">
+    <!-- 상단 헤더 -->
+    <header
+      class="bg-white/80 backdrop-blur-md shadow-sm fixed top-0 w-full z-10"
+    >
+      <div
+        class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between"
+      >
+        <h1 class="text-2xl font-bold text-[#2F855A] title-font">
+          🌱 완도고 환경 지킴이
+        </h1>
+        <a href="notification.html" class="p-2 relative">
+          <i class="fas fa-bell text-[#2F855A]"></i>
+          <span
+            class="absolute top-1 right-1 bg-[#F59E0B] rounded-full w-2 h-2"
+          ></span>
+        </a>
+      </div>
+    </header>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="max-w-7xl mx-auto pt-24 px-4 pb-4">
+      <!-- 진행률 카드 -->
+      <div
+        class="bg-white/80 backdrop-blur rounded-3xl p-6 mb-8 shadow-lg border border-green-100"
+      >
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl text-[#2F855A] font-bold">🌿 오늘의 미션</h2>
+          <button
+            onclick="openProgressDetailModal()"
+            class="text-lg text-[#4ADE80] font-bold hover:text-[#22C55E] transition-colors flex items-center"
+          >
+            <span id="progressText">75%</span>
+            <i class="fas fa-chevron-right ml-1 text-sm"></i>
+          </button>
+        </div>
+        <div class="relative">
+          <div class="h-4 bg-gray-100 rounded-full">
+            <div
+              id="progressBar"
+              class="absolute top-0 h-4 rounded-full eco-gradient"
+              style="width: 75%"
+            ></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 활동 카드 그리드 -->
+      <div class="grid grid-cols-1 gap-5 md:grid-cols-3">
+        <!-- 인증하기 -->
+        <div
+          class="eco-card bg-white/80 backdrop-blur p-6 rounded-3xl shadow-lg border border-green-100"
+        >
+          <div
+            class="bg-[#4ADE80]/10 w-14 h-14 rounded-2xl flex items-center justify-center mb-4"
+          >
+            <i class="fas fa-camera text-2xl text-[#4ADE80]"></i>
+          </div>
+          <h3 class="text-lg font-bold text-[#2F855A] mb-2">인증하기</h3>
+          <p class="text-sm text-gray-600">오늘의 활동을 기록해요 📸</p>
+        </div>
+
+        <!-- 탄소중립 팁 -->
+        <div
+          class="eco-card bg-white/80 backdrop-blur p-6 rounded-3xl shadow-lg border border-blue-100"
+        >
+          <div
+            class="bg-[#60A5FA]/10 w-14 h-14 rounded-2xl flex items-center justify-center mb-4"
+          >
+            <i class="fas fa-leaf text-2xl text-[#60A5FA]"></i>
+          </div>
+          <h3 class="text-lg font-bold text-[#2563EB] mb-2">탄소중립 팁</h3>
+          <p class="text-sm text-gray-600">실천 방법 알아보기 💡</p>
+        </div>
+
+        <!-- 식물 키우기 팁 -->
+        <div
+          class="eco-card bg-white/80 backdrop-blur p-6 rounded-3xl shadow-lg border border-purple-100"
+        >
+          <div
+            class="bg-[#A78BFA]/10 w-14 h-14 rounded-2xl flex items-center justify-center mb-4"
+          >
+            <i class="fas fa-seedling text-2xl text-[#A78BFA]"></i>
+          </div>
+          <h3 class="text-lg font-bold text-[#7C3AED] mb-2">식물 키우기 팁</h3>
+          <p class="text-sm text-gray-600">반려식물 관리 방법 🌱</p>
+        </div>
+      </div>
+    </main>
+
+    <!-- 하단 네비게이션 -->
+    <nav
+      class="fixed bottom-0 w-full bg-white/80 backdrop-blur shadow-lg rounded-t-2xl border-t border-green-100"
+    >
+      <div class="flex justify-around items-center h-16 max-w-7xl mx-auto px-4">
+        <a href="index.html" class="flex flex-col items-center text-[#2F855A]">
+          <i class="fas fa-home text-xl mb-0.5"></i>
+          <span class="text-xs">홈</span>
+        </a>
+        <a href="profile.html" class="flex flex-col items-center text-gray-400">
+          <i class="fas fa-user text-xl mb-0.5"></i>
+          <span class="text-xs">프로필</span>
+        </a>
+      </div>
+    </nav>
+
+    <!-- 모달 컨테이너들 -->
+    <!-- 인증하기 모달 -->
+    <div
+      id="certifyModal"
+      class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50"
+    >
+      <div
+        class="bg-white rounded-3xl p-6 w-11/12 max-w-lg mx-4 relative max-h-[90vh] overflow-y-auto"
+      >
+        <button
+          class="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+        >
+          <i class="fas fa-times text-xl"></i>
+        </button>
+        <h2 class="text-2xl font-bold text-[#2F855A] mb-4">🌱 활동 인증하기</h2>
+
+        <!-- 이미지 업로드 영역 -->
+        <div class="mb-6">
+          <div id="imagePreview" class="hidden mb-4">
+            <img
+              src=""
+              alt="미리보기"
+              class="w-full h-48 object-cover rounded-lg"
+            />
+            <button class="mt-2 text-red-500 text-sm" onclick="removeImage()">
+              <i class="fas fa-trash mr-1"></i> 이미지 제거
+            </button>
+          </div>
+
+          <div
+            id="uploadArea"
+            class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-[#4ADE80] transition-colors"
+          >
+            <input
+              type="file"
+              id="imageInput"
+              class="hidden"
+              accept="image/*"
+            />
+            <i class="fas fa-camera text-3xl text-gray-400 mb-2"></i>
+            <p class="text-sm text-gray-500">
+              클릭하여 이미지 선택 또는<br />
+              이미지를 여기에 끌어다 놓으세요
+            </p>
+          </div>
+        </div>
+
+        <!-- 카테고리 선택 -->
+        <h3 class="font-bold text-gray-700 mb-3">카테고리 선택</h3>
+        <div class="grid grid-cols-2 gap-3 mb-6">
+          <!-- 카테고리가 여기에 동적으로 추가됩니다 -->
+        </div>
+
+        <!-- 설명 입력 -->
+        <div class="mb-6">
+          <label class="block font-bold text-gray-700 mb-2">활동 설명</label>
+          <textarea
+            id="activityDescription"
+            class="w-full p-3 rounded-lg border border-gray-200 focus:border-[#4ADE80] focus:ring-1 focus:ring-[#4ADE80] outline-none resize-none"
+            rows="3"
+            placeholder="활동에 대해 간단히 설명해주세요 (선택사항)"
+          ></textarea>
+        </div>
+
+        <!-- 제출 버튼 -->
+        <button
+          id="submitActivity"
+          class="w-full py-3 rounded-lg bg-[#4ADE80] text-white font-bold hover:bg-[#22C55E] transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+          disabled
+        >
+          인증하기
+        </button>
+      </div>
+    </div>
+
+    <!-- 탄소중립 팁 모달 -->
+    <div
+      id="carbonTipsModal"
+      class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50"
+    >
+      <div
+        class="bg-white rounded-3xl p-6 w-11/12 max-w-2xl mx-4 relative max-h-[90vh] overflow-y-auto"
+      >
+        <button
+          class="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+        >
+          <i class="fas fa-times text-xl"></i>
+        </button>
+        <h2 class="text-2xl font-bold text-[#2563EB] mb-6">
+          💡 탄소중립 실천 팁
+        </h2>
+        <div class="space-y-6 tips-container">
+          <!-- 팁 내용이 여기에 동적으로 로드됨 -->
+        </div>
+      </div>
+    </div>
+
+    <!-- 식물 키우기 팁 모달 -->
+    <div
+      id="plantTipsModal"
+      class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50"
+    >
+      <div class="bg-white rounded-3xl p-6 w-11/12 max-w-lg mx-4 relative">
+        <button
+          class="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+        >
+          <i class="fas fa-times text-xl"></i>
+        </button>
+        <h2 class="text-2xl font-bold text-[#7C3AED] mb-4">
+          🌱 식물 키우기 팁
+        </h2>
+        <div class="space-y-4">
+          <!-- 팁 내용은 JavaScript로 동적 로드 -->
+        </div>
+      </div>
+    </div>
+
+    <!-- 진행률 상세 모달 추가 -->
+    <div
+      id="progressDetailModal"
+      class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50"
+    >
+      <div class="bg-white rounded-3xl p-6 w-11/12 max-w-lg mx-4 relative">
+        <button
+          class="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+          onclick="closeProgressDetailModal()"
+        >
+          <i class="fas fa-times text-xl"></i>
+        </button>
+        <h2 class="text-2xl font-bold text-[#2F855A] mb-6">🌱 진행 현황</h2>
+
+        <div class="space-y-6">
+          <!-- 진행률 바 -->
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-gray-600">전체 진행률</span>
+              <span class="font-bold text-[#2F855A]" id="modalProgressText"
+                >75%</span
+              >
+            </div>
+            <div class="relative h-4 bg-gray-100 rounded-full">
+              <div
+                id="modalProgressBar"
+                class="absolute top-0 h-4 rounded-full eco-gradient"
+                style="width: 75%"
+              ></div>
+            </div>
+          </div>
+
+          <!-- 오늘의 활동 -->
+          <div class="bg-green-50 rounded-xl p-4">
+            <h3 class="font-bold text-[#2F855A] mb-3">오늘의 활동</h3>
+            <div class="space-y-2" id="todayStats">
+              <div class="flex justify-between items-center">
+                <span class="text-gray-600">승인된 활동</span>
+                <span class="font-medium text-[#2F855A]">0개</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 전체 통계 -->
+          <div class="bg-green-50 rounded-xl p-4">
+            <h3 class="font-bold text-[#2F855A] mb-3">전체 통계</h3>
+            <div class="space-y-2" id="totalStats">
+              <div class="flex justify-between items-center">
+                <span class="text-gray-600">전체 기여도</span>
+                <span class="font-medium text-[#2F855A]">0%</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-gray-600">다음 1% 까지</span>
+                <span class="font-medium text-[#2F855A]">3개</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        const progressBar = document.getElementById("progressBar");
+        const progressText = document.getElementById("progressText");
+        const notificationDot = document.querySelector(
+          "[class*='bg-\\[#F59E0B\\]']"
+        );
+
+        // 토큰 체크 및 상태 업데이트
+        const token = localStorage.getItem("accessToken");
+
+        if (token) {
+          // 로그인 상태일 때
+          await updateProgress();
+          await checkNotifications();
+
+          // 5분마다 진행률과 알림 상태 업데이트
+          setInterval(async () => {
+            await updateProgress();
+            await checkNotifications();
+          }, 300000);
+        } else {
+          // 로그아웃 상태일 때
+          // 진행률 카드 숨기기
+          const progressCard = document.querySelector("[class*='bg-white']");
+          if (progressCard) {
+            progressCard.style.display = "none";
+          }
+        }
+
+        // 카드 클릭 이벤트 설정
+        setupCardClickEvents();
+      });
+
+      // 진행률 업데이트 함수
+      async function updateProgress() {
+        try {
+          const token = localStorage.getItem("accessToken");
+          if (!token) {
+            console.warn("토큰이 없습니다.");
+            return;
+          }
+
+          const response = await fetch("http://localhost:3000/api/progress", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (!response.ok) {
+            if (response.status === 401) {
+              localStorage.removeItem("accessToken");
+              window.location.href = "login.html";
+              return;
+            }
+            throw new Error("진행률 조회 실패");
+          }
+
+          const data = await response.json();
+          const progressBar = document.getElementById("progressBar");
+          const progressText = document.getElementById("progressText");
+
+          if (progressBar && progressText) {
+            progressBar.style.width = `${data.percent}%`;
+            progressText.textContent = `${data.percent}%`;
+
+            // 진행률 데이터를 localStorage에 저장
+            localStorage.setItem("progressData", JSON.stringify(data));
+
+            if (data.percent >= 100) {
+              progressBar.classList.add("bg-[#4ADE80]");
+            }
+          }
+        } catch (err) {
+          console.error("진행률 업데이트 실패:", err);
+        }
+      }
+
+      // 알림 상태 확인 함수
+      async function checkNotifications() {
+        try {
+          const token = localStorage.getItem("accessToken");
+          if (!token) {
+            return;
+          }
+
+          const response = await fetch(
+            "http://localhost:3000/api/notifications",
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error("알림 조회 실패");
+          }
+
+          const data = await response.json();
+          const notificationDot = document.querySelector(
+            "[class*='bg-\\[#F59E0B\\]']"
+          );
+          const notificationBadge = document.querySelector(
+            "#notification-badge"
+          );
+
+          if (notificationDot) {
+            notificationDot.style.display =
+              data.unreadCount > 0 ? "block" : "none";
+          }
+
+          // 알림 개수 표시 배지 추가
+          if (data.unreadCount > 0) {
+            if (!notificationBadge) {
+              const badge = document.createElement("span");
+              badge.id = "notification-badge";
+              badge.className =
+                "absolute -top-1 -right-1 bg-[#F59E0B] text-white text-xs rounded-full w-4 h-4 flex items-center justify-center";
+              badge.textContent = data.unreadCount;
+              document
+                .querySelector("a[href='notification.html']")
+                .appendChild(badge);
+            } else {
+              notificationBadge.textContent = data.unreadCount;
+            }
+          } else if (notificationBadge) {
+            notificationBadge.remove();
+          }
+        } catch (err) {
+          console.error("알림 상태 확인 실패:", err);
+        }
+      }
+
+      // 모달 관련 함수들
+      function openModal(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.classList.remove("flex");
+        modal.classList.add("hidden");
+        document.body.style.overflow = "";
+      }
+
+      // 모달 닫기 버튼 이벤트 설정
+      document.querySelectorAll(".fixed.inset-0 button").forEach((button) => {
+        button.addEventListener("click", () => {
+          const modal = button.closest(".fixed.inset-0");
+          closeModal(modal.id);
+        });
+      });
+
+      // 모달 외부 클릭시 닫기
+      document.querySelectorAll(".fixed.inset-0").forEach((modal) => {
+        modal.addEventListener("click", (e) => {
+          if (e.target === modal) {
+            closeModal(modal.id);
+          }
+        });
+      });
+
+      // 카드 클릭 이벤트 설정 함수 수정
+      function setupCardClickEvents() {
+        // 인증하기 카드
+        document
+          .querySelector(".eco-card:nth-child(1)")
+          .addEventListener("click", () => {
+            openCertifyModal();
+          });
+
+        // 탄소중립 팁 카드
+        document
+          .querySelector(".eco-card:nth-child(2)")
+          .addEventListener("click", () => {
+            openModal("carbonTipsModal");
+            loadCarbonTips();
+          });
+
+        // 식물 키우기 팁 카드
+        document
+          .querySelector(".eco-card:nth-child(3)")
+          .addEventListener("click", () => {
+            openModal("plantTipsModal");
+            loadPlantTips();
+          });
+      }
+
+      // 탄소중립 팁 로드 함수 수정
+      async function loadCarbonTips() {
+        try {
+          const response = await fetch(
+            "http://localhost:3000/api/tips?category=탄소중립",
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+              },
+            }
+          );
+
+          if (!response.ok) throw new Error("팁 로드 실패");
+          const data = await response.json();
+
+          const tipsContainer = document.querySelector(
+            "#carbonTipsModal .tips-container"
+          );
+          if (data.length === 0) {
+            tipsContainer.innerHTML = `
+              <div class="bg-blue-50 rounded-xl p-6">
+                <p class="text-gray-600 text-center">등록된 팁이 없습니다.</p>
+              </div>
+            `;
+            return;
+          }
+
+          tipsContainer.innerHTML = data
+            .sort((a, b) => a.order - b.order)
+            .map(
+              (tip) => `
+              <div class="bg-blue-50 rounded-xl p-6">
+                <h3 class="text-lg font-bold text-[#2563EB] mb-3">${
+                  tip.title
+                }</h3>
+                <div class="prose prose-sm text-gray-600">
+                  ${tip.content}
+                </div>
+                ${
+                  tip.imageUrl
+                    ? `
+                  <img src="${tip.imageUrl}" alt="${tip.title}" class="mt-4 rounded-lg w-full object-cover h-48">
+                `
+                    : ""
+                }
+              </div>
+            `
+            )
+            .join("");
+        } catch (err) {
+          console.error("탄소중립 팁 로드 실패:", err);
+        }
+      }
+
+      // 식물 관리 팁 로드 함수 수정
+      async function loadPlantTips() {
+        try {
+          const response = await fetch(
+            "http://localhost:3000/api/tips?category=식물관리",
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+              },
+            }
+          );
+
+          if (!response.ok) throw new Error("팁 로드 실패");
+          const data = await response.json();
+
+          const tipsContainer = document.querySelector(
+            "#plantTipsModal .space-y-4"
+          );
+          if (data.length === 0) {
+            tipsContainer.innerHTML = `
+              <div class="bg-purple-50 rounded-xl p-4">
+                <p class="text-gray-600 text-center">등록된 팁이 없습니다.</p>
+              </div>
+            `;
+            return;
+          }
+
+          tipsContainer.innerHTML = data
+            .sort((a, b) => a.order - b.order)
+            .map(
+              (tip) => `
+              <div class="bg-purple-50 rounded-xl p-4">
+                <h3 class="font-bold text-[#7C3AED] mb-2">${tip.title}</h3>
+                <p class="text-sm text-gray-600">${tip.content}</p>
+                ${
+                  tip.imageUrl
+                    ? `
+                  <img src="${tip.imageUrl}" alt="${tip.title}" class="mt-4 rounded-lg w-full object-cover h-40">
+                `
+                    : ""
+                }
+              </div>
+            `
+            )
+            .join("");
+        } catch (err) {
+          console.error("식물 관리 팁 로드 실패:", err);
+        }
+      }
+
+      // 인증하기 모달 관련 코드 수정
+      function openCertifyModal() {
+        const modal = document.getElementById("certifyModal");
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+        document.body.style.overflow = "hidden";
+
+        // 모달 초기화
+        const imagePreview = document.getElementById("imagePreview");
+        const uploadArea = document.getElementById("uploadArea");
+        const imageInput = document.getElementById("imageInput");
+        const submitButton = document.getElementById("submitActivity");
+        const descriptionInput = document.getElementById("activityDescription");
+
+        imagePreview.classList.add("hidden");
+        uploadArea.classList.remove("hidden");
+        imageInput.value = "";
+        descriptionInput.value = "";
+        submitButton.disabled = true;
+
+        // 카테고리 로드
+        loadCategories();
+
+        // 이미지 업로드 설정
+        setupImageUpload();
+      }
+
+      // 이미지 업로드 관련 함수들
+      function setupImageUpload() {
+        const uploadArea = document.getElementById("uploadArea");
+        const imageInput = document.getElementById("imageInput");
+        const imagePreview = document.getElementById("imagePreview");
+        const submitButton = document.getElementById("submitActivity");
+
+        // 드래그 앤 드롭 이벤트
+        uploadArea.addEventListener("dragover", (e) => {
+          e.preventDefault();
+          uploadArea.classList.add("border-[#4ADE80]");
+        });
+
+        uploadArea.addEventListener("dragleave", () => {
+          uploadArea.classList.remove("border-[#4ADE80]");
+        });
+
+        uploadArea.addEventListener("drop", (e) => {
+          e.preventDefault();
+          uploadArea.classList.remove("border-[#4ADE80]");
+
+          const file = e.dataTransfer.files[0];
+          if (file && file.type.startsWith("image/")) {
+            handleImageFile(file);
+          }
+        });
+
+        // 클릭 이벤트
+        uploadArea.addEventListener("click", () => {
+          imageInput.click();
+        });
+
+        imageInput.addEventListener("change", (e) => {
+          if (e.target.files[0]) {
+            handleImageFile(e.target.files[0]);
+          }
+        });
+      }
+
+      // 이미지 파일 처리 함수
+      function handleImageFile(file) {
+        const reader = new FileReader();
+        const imagePreview = document.getElementById("imagePreview");
+        const uploadArea = document.getElementById("uploadArea");
+        const img = imagePreview.querySelector("img");
+
+        reader.onload = (e) => {
+          img.src = e.target.result;
+          imagePreview.classList.remove("hidden");
+          uploadArea.classList.add("hidden");
+          validateForm();
+        };
+
+        reader.readAsDataURL(file);
+      }
+
+      // 이미지 제거 함수
+      function removeImage() {
+        const imagePreview = document.getElementById("imagePreview");
+        const uploadArea = document.getElementById("uploadArea");
+        const imageInput = document.getElementById("imageInput");
+
+        imagePreview.classList.add("hidden");
+        uploadArea.classList.remove("hidden");
+        imageInput.value = "";
+        validateForm();
+      }
+
+      // 폼 유효성 검사
+      function validateForm() {
+        const submitButton = document.getElementById("submitActivity");
+        const hasImage = !document
+          .getElementById("imagePreview")
+          .classList.contains("hidden");
+        const selectedCategory = document.querySelector(
+          ".category-btn.selected"
+        );
+
+        submitButton.disabled = !(hasImage && selectedCategory);
+      }
+
+      // 활동 제출 함수
+      async function submitActivity() {
+        try {
+          const selectedCategory = document.querySelector(
+            ".category-btn.selected"
+          );
+          const imageInput = document.getElementById("imageInput");
+          const description = document
+            .getElementById("activityDescription")
+            .value.trim();
+
+          if (!selectedCategory || !imageInput.files[0]) {
+            alert("카테고리 선택과 이미지 업로드는 필수입니다.");
+            return;
+          }
+
+          // 로딩 상태 표시
+          const submitButton = document.getElementById("submitActivity");
+          const originalText = submitButton.textContent;
+          submitButton.disabled = true;
+          submitButton.textContent = "처리중...";
+
+          // 이미지 업로드
+          const formData = new FormData();
+          formData.append("image", imageInput.files[0]);
+
+          const uploadResponse = await fetch(
+            "http://localhost:3000/api/upload",
+            {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+              },
+              body: formData,
+            }
+          );
+
+          if (!uploadResponse.ok) {
+            throw new Error("이미지 업로드에 실패했습니다.");
+          }
+
+          const { imageUrl } = await uploadResponse.json();
+
+          // 활동 등록
+          const activityResponse = await fetch(
+            "http://localhost:3000/api/activities",
+            {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                category: selectedCategory.dataset.category,
+                imageUrl,
+                description,
+              }),
+            }
+          );
+
+          if (!activityResponse.ok) {
+            throw new Error("활동 등록에 실패했습니다.");
+          }
+
+          const result = await activityResponse.json();
+          alert(result.message);
+
+          // 모달 닫기 및 진행률 업데이트
+          closeModal("certifyModal");
+          updateProgress();
+        } catch (err) {
+          console.error("활동 등록 실패:", err);
+          alert(err.message || "활동 등록 중 오류가 발생했습니다.");
+        } finally {
+          // 버튼 상태 복구
+          const submitButton = document.getElementById("submitActivity");
+          submitButton.disabled = false;
+          submitButton.textContent = "인증하기";
+        }
+      }
+
+      // 진행률 상세 모달 관련 함수
+      function openProgressDetailModal() {
+        const modal = document.getElementById("progressDetailModal");
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+        document.body.style.overflow = "hidden";
+
+        // 모달 내 진행률 정보 업데이트
+        updateModalProgress();
+      }
+
+      function closeProgressDetailModal() {
+        const modal = document.getElementById("progressDetailModal");
+        modal.classList.remove("flex");
+        modal.classList.add("hidden");
+        document.body.style.overflow = "";
+      }
+
+      // 모달 내 진행률 정보 업데이트
+      function updateModalProgress() {
+        const data = JSON.parse(localStorage.getItem("progressData") || "{}");
+
+        // 진행률 바 업데이트
+        const modalProgressBar = document.getElementById("modalProgressBar");
+        const modalProgressText = document.getElementById("modalProgressText");
+        if (modalProgressBar && modalProgressText) {
+          modalProgressBar.style.width = `${data.percent || 0}%`;
+          modalProgressText.textContent = `${data.percent || 0}%`;
+        }
+
+        // 오늘의 활동 업데이트
+        const todayStats = document.getElementById("todayStats");
+        if (todayStats) {
+          todayStats.innerHTML = `
+            <div class="flex justify-between items-center">
+              <span class="text-gray-600">승인된 활동</span>
+              <span class="font-medium text-[#2F855A]">${
+                data.userContribution?.today || 0
+              }개</span>
+            </div>
+          `;
+        }
+
+        // 전체 통계 업데이트
+        const totalStats = document.getElementById("totalStats");
+        if (totalStats) {
+          totalStats.innerHTML = `
+            <div class="flex justify-between items-center">
+              <span class="text-gray-600">전체 기여도</span>
+              <span class="font-medium text-[#2F855A]">${
+                data.userContribution?.percent || 0
+              }%</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-gray-600">다음 1% 까지</span>
+              <span class="font-medium text-[#2F855A]">${
+                data.remainingForNext || 0
+              }개</span>
+            </div>
+          `;
+        }
+      }
+
+      // 카테고리 로드 및 표시 함수 추가
+      async function loadCategories() {
+        try {
+          const response = await fetch("http://localhost:3000/api/categories", {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+          });
+
+          if (!response.ok) throw new Error("카테고리 로드 실패");
+          const categories = await response.json();
+
+          const categoryContainer = document.querySelector(".grid.grid-cols-2");
+          if (categories.length === 0) {
+            categoryContainer.innerHTML = `
+              <p class="col-span-2 text-center text-gray-500">등록된 카테고리가 없습니다.</p>
+            `;
+            return;
+          }
+
+          categoryContainer.innerHTML = categories
+            .sort((a, b) => a.order - b.order)
+            .map(
+              (category) => `
+              <button
+                class="eco-card bg-white p-4 rounded-xl shadow border border-green-100 text-center category-btn"
+                data-category="${category.code}"
+              >
+                <i class="fas ${getCategoryIcon(
+                  category.code
+                )} text-2xl text-[#4ADE80] mb-2"></i>
+                <p class="text-sm">${category.name}</p>
+              </button>
+            `
+            )
+            .join("");
+
+          // 카테고리 버튼 클릭 이벤트 추가
+          document.querySelectorAll(".category-btn").forEach((btn) => {
+            btn.addEventListener("click", () => {
+              document.querySelectorAll(".category-btn").forEach((b) => {
+                b.classList.remove(
+                  "selected",
+                  "border-[#4ADE80]",
+                  "bg-green-50"
+                );
+              });
+              btn.classList.add("selected", "border-[#4ADE80]", "bg-green-50");
+              validateForm();
+            });
+          });
+        } catch (err) {
+          console.error("카테고리 로드 실패:", err);
+        }
+      }
+
+      // 카테고리별 아이콘 매핑 함수
+      function getCategoryIcon(categoryCode) {
+        const iconMap = {
+          no_leftover: "fa-utensils",
+          public_transport: "fa-bus",
+          save_energy: "fa-lightbulb",
+          // 필요한 카테고리 아이콘 추가
+        };
+        return iconMap[categoryCode] || "fa-check"; // 기본 아이콘
+      }
+
+      // 제출 버튼 이벤트 리스너 추가
+      document
+        .getElementById("submitActivity")
+        .addEventListener("click", submitActivity);
+    </script>
+  </body>
+</html>

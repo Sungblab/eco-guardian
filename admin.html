@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>관리자 페이지 - 완도고 환경 지킴이</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poor+Story&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Gaegu&display=swap");
+
+      body {
+        font-family: "Poor Story", "Gaegu", sans-serif;
+        background-color: #f5f7f4;
+        letter-spacing: -0.02em;
+      }
+
+      .title-font {
+        font-family: "Gaegu", "Poor Story", sans-serif;
+      }
+
+      .eco-gradient {
+        background: linear-gradient(120deg, #4ade80 0%, #60a5fa 100%);
+      }
+    </style>
+  </head>
+  <body class="bg-[#F5F7F4]">
+    <!-- 상단 헤더 -->
+    <header
+      class="bg-white/80 backdrop-blur-md shadow-sm fixed top-0 w-full z-10"
+    >
+      <div
+        class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between"
+      >
+        <h1 class="text-2xl font-bold text-[#2F855A] title-font">
+          완도고 환경 지킴이
+        </h1>
+        <div class="flex items-center space-x-4">
+          <span class="text-[#2F855A] font-bold">관리자 모드</span>
+          <button id="logoutBtn" class="text-[#2F855A]">
+            <i class="fas fa-sign-out-alt"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- 사이드바와 메인 컨텐츠 -->
+    <div class="flex min-h-screen pt-16">
+      <!-- 사이드바 -->
+      <div class="w-64 bg-white/80 backdrop-blur shadow-lg">
+        <div class="p-4">
+          <ul class="space-y-2">
+            <li>
+              <button
+                id="dashboardBtn"
+                class="w-full flex items-center px-4 py-3 text-[#2F855A] hover:bg-green-50 rounded-xl"
+              >
+                <i class="fas fa-chart-line mr-3"></i>
+                대시보드
+              </button>
+            </li>
+            <li>
+              <button
+                id="activitiesBtn"
+                class="w-full flex items-center px-4 py-2 text-gray-700 hover:bg-green-50 rounded-md"
+              >
+                <i class="fas fa-tasks mr-3"></i>
+                활동 인증 관리
+              </button>
+            </li>
+            <li>
+              <button
+                id="usersBtn"
+                class="w-full flex items-center px-4 py-2 text-gray-700 hover:bg-green-50 rounded-md"
+              >
+                <i class="fas fa-users mr-3"></i>
+                사용자 관리
+              </button>
+            </li>
+            <li>
+              <button
+                id="categoriesBtn"
+                class="w-full flex items-center px-4 py-2 text-gray-700 hover:bg-green-50 rounded-md"
+              >
+                <i class="fas fa-list mr-3"></i>
+                카테고리 관리
+              </button>
+            </li>
+            <li>
+              <button
+                id="tipsBtn"
+                class="w-full flex items-center px-4 py-2 text-gray-700 hover:bg-green-50 rounded-md"
+              >
+                <i class="fas fa-lightbulb mr-3"></i>
+                팁 관리
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 메인 컨텐츠 영역 -->
+      <div class="flex-1 p-8">
+        <!-- 대시보드 섹션 -->
+        <div id="dashboardSection" class="space-y-8">
+          <h2 class="text-2xl font-bold text-[#2F855A] title-font">대시보드</h2>
+
+          <!-- 통계 카드들 -->
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div
+              class="bg-white/80 backdrop-blur p-6 rounded-3xl shadow-lg border border-green-100"
+            >
+              <h3 class="text-lg font-bold text-[#2F855A]">전체 진행률</h3>
+              <div class="mt-2">
+                <div class="relative pt-1">
+                  <div
+                    class="overflow-hidden h-2 text-xs flex rounded bg-green-200"
+                  >
+                    <div
+                      id="progressBar"
+                      class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-500"
+                      style="width: 0%"
+                    ></div>
+                  </div>
+                </div>
+                <p
+                  id="progressText"
+                  class="mt-2 text-2xl font-bold text-green-600"
+                >
+                  0%
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="bg-white/80 backdrop-blur p-6 rounded-3xl shadow-lg border border-green-100"
+            >
+              <h3 class="text-lg font-bold text-[#2F855A]">대기중인 인증</h3>
+              <p
+                id="pendingCount"
+                class="mt-2 text-2xl font-bold text-yellow-600"
+              >
+                0
+              </p>
+            </div>
+
+            <div
+              class="bg-white/80 backdrop-blur p-6 rounded-3xl shadow-lg border border-green-100"
+            >
+              <h3 class="text-lg font-bold text-[#2F855A]">전체 사용자</h3>
+              <p id="userCount" class="mt-2 text-2xl font-bold text-blue-600">
+                0
+              </p>
+            </div>
+
+            <div
+              class="bg-white/80 backdrop-blur p-6 rounded-3xl shadow-lg border border-green-100"
+            >
+              <h3 class="text-lg font-bold text-[#2F855A]">오늘의 활동</h3>
+              <p
+                id="todayActivities"
+                class="mt-2 text-2xl font-bold text-purple-600"
+              >
+                0
+              </p>
+            </div>
+          </div>
+
+          <!-- 카테고리별 통계 -->
+          <div
+            class="bg-white/80 backdrop-blur p-8 rounded-3xl shadow-lg border border-green-100"
+          >
+            <h3 class="text-xl font-bold text-[#2F855A]">카테고리별 통계</h3>
+            <div
+              id="categoryStats"
+              class="grid grid-cols-1 md:grid-cols-3 gap-4"
+            >
+              <!-- 카테고리 통계가 여기에 동적으로 추가됩니다 -->
+            </div>
+          </div>
+        </div>
+
+        <!-- 활동 인증 관리 섹션 -->
+        <div id="activitiesSection" class="hidden space-y-6">
+          <div class="flex justify-between items-center">
+            <h2 class="text-2xl font-bold text-[#2F855A] title-font">
+              활동 인증 관리
+            </h2>
+            <div class="flex space-x-4">
+              <select id="statusFilter" class="rounded-lg border-gray-300">
+                <option value="">전체 상태</option>
+                <option value="pending">대기중</option>
+                <option value="approved">승인됨</option>
+                <option value="rejected">거절됨</option>
+              </select>
+              <select id="categoryFilter" class="rounded-lg border-gray-300">
+                <option value="">전체 카테고리</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl shadow-lg p-6">
+            <div id="activitiesList" class="space-y-4">
+              <!-- 활동 목록이 여기에 동적으로 추가됩니다 -->
+            </div>
+            <div
+              id="activitiesPagination"
+              class="mt-6 flex justify-center space-x-2"
+            >
+              <!-- 페이지네이션이 여기에 동적으로 추가됩니다 -->
+            </div>
+          </div>
+        </div>
+
+        <!-- 사용자 관리 섹션 -->
+        <div id="usersSection" class="hidden space-y-6">
+          <div class="flex justify-between items-center">
+            <h2 class="text-2xl font-bold text-[#2F855A] title-font">
+              사용자 관리
+            </h2>
+            <div class="flex space-x-4">
+              <input
+                type="text"
+                id="userSearchInput"
+                placeholder="학번 검색..."
+                class="rounded-lg border-gray-300"
+              />
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl shadow-lg p-6">
+            <div class="overflow-x-auto">
+              <table class="min-w-full">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      학번
+                    </th>
+                    <th
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      이름
+                    </th>
+                    <th
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      가입일
+                    </th>
+                    <th
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      권한
+                    </th>
+                    <th
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      관리
+                    </th>
+                  </tr>
+                </thead>
+                <tbody id="usersList" class="bg-white divide-y divide-gray-200">
+                  <!-- 사용자 목록이 여기에 동적으로 추가됩니다 -->
+                </tbody>
+              </table>
+            </div>
+            <div
+              id="usersPagination"
+              class="mt-6 flex justify-center space-x-2"
+            >
+              <!-- 페이지네이션이 여기에 동적으로 추가됩니다 -->
+            </div>
+          </div>
+        </div>
+
+        <!-- 카테고리 관리 섹션 -->
+        <div id="categoriesSection" class="hidden space-y-6">
+          <div class="flex justify-between items-center">
+            <h2 class="text-2xl font-bold text-[#2F855A] title-font">
+              카테고리 관리
+            </h2>
+            <button
+              onclick="showAddCategoryModal()"
+              class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+            >
+              카테고리 추가
+            </button>
+          </div>
+
+          <div class="bg-white rounded-xl shadow-lg p-6">
+            <div class="overflow-x-auto">
+              <table class="min-w-full">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      코드
+                    </th>
+                    <th
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      이름
+                    </th>
+                    <th
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      설명
+                    </th>
+                    <th
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      순서
+                    </th>
+                    <th
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      상태
+                    </th>
+                    <th
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      관리
+                    </th>
+                  </tr>
+                </thead>
+                <tbody
+                  id="categoriesList"
+                  class="bg-white divide-y divide-gray-200"
+                >
+                  <!-- 카테고리 목록이 여기에 동적으로 추가됩니다 -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 카테고리 추가/수정 모달 -->
+        <div
+          id="categoryModal"
+          class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center"
+        >
+          <div class="bg-white rounded-lg p-8 max-w-md w-full">
+            <h3 class="text-xl font-bold text-gray-900 mb-4" id="modalTitle">
+              카테고리 추가
+            </h3>
+            <form id="categoryForm" class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >코드</label
+                >
+                <input
+                  type="text"
+                  id="categoryCode"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
+                  required
+                  pattern="[a-zA-Z0-9_-]+"
+                  title="영문, 숫자, 하이픈(-), 언더스코어(_)만 사용 가능합니다"
+                  placeholder="예: eco_action"
+                />
+                <p class="mt-1 text-sm text-gray-500">
+                  영문, 숫자, 하이픈(-), 언더스코어(_)만 사용 가능
+                </p>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >이름</label
+                >
+                <input
+                  type="text"
+                  id="categoryName"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
+                  required
+                  maxlength="20"
+                  placeholder="예: 친환경 활동"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >설명</label
+                >
+                <textarea
+                  id="categoryDescription"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
+                  rows="3"
+                  required
+                  maxlength="200"
+                  placeholder="카테고리에 대한 자세한 설명을 입력하세요"
+                ></textarea>
+                <p class="mt-1 text-sm text-gray-500">최대 200자</p>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >순서</label
+                >
+                <input
+                  type="number"
+                  id="categoryOrder"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
+                  min="0"
+                  required
+                  placeholder="0"
+                />
+                <p class="mt-1 text-sm text-gray-500">
+                  낮은 숫자가 먼저 표시됩니다
+                </p>
+              </div>
+              <div class="flex justify-end space-x-3 pt-4">
+                <button
+                  type="button"
+                  onclick="hideModal()"
+                  class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                >
+                  취소
+                </button>
+                <button
+                  type="submit"
+                  class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
+                >
+                  저장
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- 팁 관리 섹션 -->
+        <div id="tipsSection" class="hidden space-y-6">
+          <div class="flex justify-between items-center">
+            <h2 class="text-2xl font-bold text-[#2F855A] title-font">
+              팁 관리
+            </h2>
+            <div class="flex space-x-4">
+              <select id="tipCategoryFilter" class="rounded-lg border-gray-300">
+                <option value="">전체 카테고리</option>
+                <option value="탄소중립">탄소중립</option>
+                <option value="식물관리">식물관리</option>
+              </select>
+              <button
+                onclick="showAddTipModal()"
+                class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+              >
+                팁 추가
+              </button>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl shadow-lg p-6">
+            <div
+              class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              id="tipsList"
+            >
+              <!-- 팁 목록이 여기에 동적으로 추가됩니다 -->
+            </div>
+          </div>
+        </div>
+
+        <!-- 팁 추가/수정 모달 -->
+        <div
+          id="tipModal"
+          class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center"
+        >
+          <div class="bg-white rounded-lg p-8 max-w-2xl w-full">
+            <h3 class="text-xl font-bold text-gray-900 mb-4" id="tipModalTitle">
+              팁 추가
+            </h3>
+            <form id="tipForm" class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >카테고리</label
+                >
+                <select
+                  id="tipCategory"
+                  class="mt-1 block w-full rounded-md border-gray-300"
+                  required
+                >
+                  <option value="탄소중립">탄소중립</option>
+                  <option value="식물관리">식물관리</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >제목</label
+                >
+                <input
+                  type="text"
+                  id="tipTitle"
+                  class="mt-1 block w-full rounded-md border-gray-300"
+                  required
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >내용</label
+                >
+                <textarea
+                  id="tipContent"
+                  class="mt-1 block w-full rounded-md border-gray-300"
+                  rows="3"
+                  required
+                ></textarea>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >이미지 URL (선택사항)</label
+                >
+                <input
+                  type="url"
+                  id="tipImageUrl"
+                  class="mt-1 block w-full rounded-md border-gray-300"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >순서</label
+                >
+                <input
+                  type="number"
+                  id="tipOrder"
+                  class="mt-1 block w-full rounded-md border-gray-300"
+                  min="0"
+                  required
+                />
+              </div>
+              <div class="flex justify-end space-x-3">
+                <button
+                  type="button"
+                  onclick="hideTipModal()"
+                  class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300"
+                >
+                  취소
+                </button>
+                <button
+                  type="submit"
+                  class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+                >
+                  저장
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // 페이지 로드 시 인증 확인 및 초기 데이터 로드
+      document.addEventListener("DOMContentLoaded", async () => {
+        const token = localStorage.getItem("accessToken");
+        const userRole = localStorage.getItem("userRole");
+
+        if (!token || userRole !== "admin") {
+          window.location.href = "login.html";
+          return;
+        }
+
+        await loadDashboard();
+      });
+
+      // 대시보드 데이터 로드
+      async function loadDashboard() {
+        try {
+          const token = localStorage.getItem("accessToken");
+          const response = await fetch(
+            "http://127.0.0.1:3000/api/admin/dashboard",
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          const data = await response.json();
+
+          // 통계 업데이트
+          const progressBar = document.getElementById("progressBar");
+          const progressText = document.getElementById("progressText");
+
+          if (progressBar && progressText) {
+            progressBar.style.width = `${data.progress || 0}%`;
+            progressText.textContent = `${data.progress || 0}%`;
+          }
+
+          // 다른 통계 업데이트
+          document.getElementById("pendingCount").textContent =
+            data.pendingActivities || 0;
+          document.getElementById("userCount").textContent =
+            data.totalUsers || 0;
+          document.getElementById("todayActivities").textContent =
+            data.todayActivities || 0;
+
+          // 카테고리별 통계 표시
+          const categoryStatsDiv = document.getElementById("categoryStats");
+          categoryStatsDiv.innerHTML = "";
+
+          data.categoryStats.forEach((stat) => {
+            const div = document.createElement("div");
+            div.className = "bg-gray-50 rounded-lg p-4";
+            div.innerHTML = `
+              <h4 class="font-medium text-gray-900">${stat.name}</h4>
+              <dl class="mt-2 grid grid-cols-2 gap-4">
+                <div>
+                  <dt class="text-sm text-gray-500">승인됨</dt>
+                  <dd class="text-lg font-medium text-green-600">${stat.approved}</dd>
+                </div>
+                <div>
+                  <dt class="text-sm text-gray-500">대기중</dt>
+                  <dd class="text-lg font-medium text-yellow-600">${stat.pending}</dd>
+                </div>
+              </dl>
+            `;
+            categoryStatsDiv.appendChild(div);
+          });
+        } catch (err) {
+          console.error("대시보드 데이터 로드 실패:", err);
+        }
+      }
+
+      // 섹션 전환 함수
+      function showSection(sectionId) {
+        const sections = [
+          "dashboardSection",
+          "activitiesSection",
+          "usersSection",
+          "categoriesSection",
+          "tipsSection",
+        ];
+
+        sections.forEach((id) => {
+          document.getElementById(id).classList.add("hidden");
+        });
+
+        document.getElementById(sectionId).classList.remove("hidden");
+      }
+
+      // 네비게이션 이벤트 리스너
+      document.getElementById("dashboardBtn").addEventListener("click", () => {
+        showSection("dashboardSection");
+        loadDashboard();
+      });
+
+      // 로그아웃 처리
+      document
+        .getElementById("logoutBtn")
+        .addEventListener("click", async () => {
+          try {
+            const token = localStorage.getItem("accessToken");
+            const refreshToken = localStorage.getItem("refreshToken");
+
+            await fetch("http://127.0.0.1:3000/api/auth/logout", {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ refreshToken }),
+            });
+
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("refreshToken");
+            localStorage.removeItem("userRole");
+
+            window.location.href = "login.html";
+          } catch (err) {
+            console.error("로그아웃 실패:", err);
+            alert("로그아웃 처리 중 오류가 발생했습니다.");
+          }
+        });
+
+      // 활동 인증 관리 섹션 관련 코드
+      document.getElementById("activitiesBtn").addEventListener("click", () => {
+        showSection("activitiesSection");
+        loadActivities();
+      });
+
+      // 카테고리 필터 초기화
+      async function initializeCategoryFilter() {
+        try {
+          const response = await fetch("http://127.0.0.1:3000/api/categories", {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+          });
+          const categories = await response.json();
+
+          const categoryFilter = document.getElementById("categoryFilter");
+          categories.forEach((category) => {
+            const option = document.createElement("option");
+            option.value = category.code;
+            option.textContent = category.name;
+            categoryFilter.appendChild(option);
+          });
+        } catch (err) {
+          console.error("카테고리 로드 실패:", err);
+        }
+      }
+
+      // 활동 목록 로드
+      async function loadActivities(page = 1) {
+        try {
+          const status = document.getElementById("statusFilter").value;
+          const category = document.getElementById("categoryFilter").value;
+
+          const response = await fetch(
+            `http://127.0.0.1:3000/api/admin/activities?page=${page}&status=${status}&category=${category}`,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+              },
+            }
+          );
+
+          const data = await response.json();
+          displayActivities(data);
+        } catch (err) {
+          console.error("활동 목록 로드 실패:", err);
+        }
+      }
+
+      // 활동 목록 표시
+      function displayActivities(data) {
+        const activitiesList = document.getElementById("activitiesList");
+        activitiesList.innerHTML = "";
+
+        data.activities.forEach((activity) => {
+          const activityElement = document.createElement("div");
+          activityElement.className = "border rounded-lg p-4 space-y-2";
+          activityElement.innerHTML = `
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="font-bold">${activity.userId.name} (${
+            activity.userId.studentId
+          })</p>
+                <p class="text-sm text-gray-600">${activity.category}</p>
+                <p class="text-sm text-gray-500">${new Date(
+                  activity.createdAt
+                ).toLocaleString()}</p>
+              </div>
+              <div class="flex space-x-2">
+                ${
+                  activity.status === "pending"
+                    ? `
+                  <button onclick="updateActivityStatus('${activity._id}', 'approved')" 
+                          class="px-3 py-1 bg-green-500 text-white rounded-lg">
+                    승인
+                  </button>
+                  <button onclick="updateActivityStatus('${activity._id}', 'rejected')"
+                          class="px-3 py-1 bg-red-500 text-white rounded-lg">
+                    거절
+                  </button>
+                `
+                    : `
+                  <span class="px-3 py-1 ${
+                    activity.status === "approved"
+                      ? "bg-green-100 text-green-800"
+                      : "bg-red-100 text-red-800"
+                  } rounded-lg">
+                    ${activity.status === "approved" ? "승인됨" : "거절됨"}
+                  </span>
+                `
+                }
+              </div>
+            </div>
+            <div class="mt-2">
+              <img src="${
+                activity.imageUrl
+              }" alt="활동 인증 이미지" class="w-32 h-32 object-cover rounded-lg">
+            </div>
+          `;
+          activitiesList.appendChild(activityElement);
+        });
+
+        // 페이지네이션 표시
+        displayPagination(data);
+      }
+
+      // 페이지네이션 표시
+      function displayPagination(data) {
+        const pagination = document.getElementById("activitiesPagination");
+        pagination.innerHTML = "";
+
+        for (let i = 1; i <= data.totalPages; i++) {
+          const button = document.createElement("button");
+          button.className = `px-3 py-1 rounded-lg ${
+            i === data.currentPage
+              ? "bg-green-500 text-white"
+              : "bg-gray-200 hover:bg-gray-300"
+          }`;
+          button.textContent = i;
+          button.onclick = () => loadActivities(i);
+          pagination.appendChild(button);
+        }
+      }
+
+      // 활동 상태 업데이트
+      async function updateActivityStatus(activityId, status) {
+        try {
+          const response = await fetch(
+            `http://127.0.0.1:3000/api/activities/${activityId}/status`,
+            {
+              method: "PATCH",
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ status }),
+            }
+          );
+
+          if (response.ok) {
+            loadActivities(); // 목록 새로고침
+          } else {
+            const error = await response.json();
+            alert(error.message);
+          }
+        } catch (err) {
+          console.error("활동 상태 업데이트 실패:", err);
+          alert("활동 상태 업데이트 중 오류가 발생했습니다.");
+        }
+      }
+
+      // 필터 변경 이벤트 리스너
+      document
+        .getElementById("statusFilter")
+        .addEventListener("change", () => loadActivities(1));
+      document
+        .getElementById("categoryFilter")
+        .addEventListener("change", () => loadActivities(1));
+
+      // 페이지 로드 시 카테고리 필터 초기화
+      document.addEventListener("DOMContentLoaded", () => {
+        initializeCategoryFilter();
+      });
+
+      // 용자 관리 섹션 관련 코드
+      document.getElementById("usersBtn").addEventListener("click", () => {
+        showSection("usersSection");
+        loadUsers();
+      });
+
+      // 사용자 목록 로드
+      async function loadUsers(page = 1) {
+        try {
+          const searchTerm = document.getElementById("userSearchInput").value;
+          const response = await fetch(
+            `http://127.0.0.1:3000/api/users?page=${page}&search=${searchTerm}`,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+              },
+            }
+          );
+
+          const data = await response.json();
+          displayUsers(data);
+        } catch (err) {
+          console.error("사용자 목록 로드 실패:", err);
+        }
+      }
+
+      // 사용자 목록 표시
+      function displayUsers(data) {
+        const usersList = document.getElementById("usersList");
+        usersList.innerHTML = "";
+
+        data.users.forEach((user) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${
+              user.studentId
+            }</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${
+              user.name
+            }</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              ${new Date(user.createdAt).toLocaleDateString()}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              ${
+                user.role === "admin"
+                  ? '<span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">관리자</span>'
+                  : '<span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">일반</span>'
+              }
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+              <button 
+                onclick="toggleUserRole('${user._id}', '${
+            user.role === "admin" ? "user" : "admin"
+          }')"
+                class="text-indigo-600 hover:text-indigo-900"
+              >
+                ${user.role === "admin" ? "관리자 해제" : "관리자 지정"}
+              </button>
+              <button
+                onclick="resetUserPassword('${user._id}')"
+                class="text-yellow-600 hover:text-yellow-900"
+              >
+                비밀번호 초기화
+              </button>
+              <button
+                onclick="deleteUser('${user._id}')"
+                class="text-red-600 hover:text-red-900"
+              >
+                삭제
+              </button>
+            </td>
+          `;
+          usersList.appendChild(row);
+        });
+
+        // 페이지네이션 표시
+        displayUsersPagination(data);
+      }
+
+      // 사용자 페이지네이션 표시
+      function displayUsersPagination(data) {
+        const pagination = document.getElementById("usersPagination");
+        pagination.innerHTML = "";
+
+        for (let i = 1; i <= data.totalPages; i++) {
+          const button = document.createElement("button");
+          button.className = `px-3 py-1 rounded-lg ${
+            i === data.currentPage
+              ? "bg-green-500 text-white"
+              : "bg-gray-200 hover:bg-gray-300"
+          }`;
+          button.textContent = i;
+          button.onclick = () => loadUsers(i);
+          pagination.appendChild(button);
+        }
+      }
+
+      // 사용자 권한 변경
+      async function toggleUserRole(userId, newRole) {
+        try {
+          const response = await fetch(
+            `http://127.0.0.1:3000/api/users/${userId}/role`,
+            {
+              method: "PATCH",
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ role: newRole }),
+            }
+          );
+
+          if (response.ok) {
+            loadUsers(); // 목록 새로고침
+          } else {
+            const error = await response.json();
+            alert(error.message);
+          }
+        } catch (err) {
+          console.error("사용자 권한 변경 실패:", err);
+          alert("사용자 권한 변경 중 오류가 발생했습니다.");
+        }
+      }
+
+      // 검색 입력 이벤트 리스너 (디바운스 적용)
+      let searchTimeout;
+      document
+        .getElementById("userSearchInput")
+        .addEventListener("input", (e) => {
+          clearTimeout(searchTimeout);
+          searchTimeout = setTimeout(() => loadUsers(1), 300);
+        });
+
+      // 카테고리 관리 섹션 관련 코드
+      document.getElementById("categoriesBtn").addEventListener("click", () => {
+        showSection("categoriesSection");
+        loadCategories();
+      });
+
+      // 카테고리 목록 로드
+      async function loadCategories() {
+        try {
+          const response = await fetch(
+            "http://127.0.0.1:3000/api/categories/all",
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+              },
+            }
+          );
+
+          const categories = await response.json();
+          displayCategories(categories);
+        } catch (err) {
+          console.error("카테고리 목록 로드 실패:", err);
+        }
+      }
+
+      // 카테고리 목록 표시
+      function displayCategories(categories) {
+        const categoriesList = document.getElementById("categoriesList");
+        categoriesList.innerHTML = "";
+
+        categories.forEach((category) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${
+              category.code
+            }</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${
+              category.name
+            }</td>
+            <td class="px-6 py-4 text-sm text-gray-500">${
+              category.description
+            }</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${
+              category.order
+            }</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              <span class="px-2 py-1 text-xs font-semibold rounded-full ${
+                category.isActive
+                  ? "bg-green-100 text-green-800"
+                  : "bg-red-100 text-red-800"
+              }">
+                ${category.isActive ? "활성" : "비활성"}
+              </span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+              <button
+                onclick="toggleCategoryStatus('${
+                  category.code
+                }', ${!category.isActive})"
+                class="text-${
+                  category.isActive ? "red" : "green"
+                }-600 hover:text-${category.isActive ? "red" : "green"}-900"
+              >
+                ${category.isActive ? "비활성화" : "활성화"}
+              </button>
+              <button
+                onclick="deleteCategory('${category.code}')"
+                class="text-red-600 hover:text-red-900"
+              >
+                삭제
+              </button>
+            </td>
+          `;
+          categoriesList.appendChild(row);
+        });
+      }
+
+      // 모달 관련 함수들
+      function showAddCategoryModal() {
+        document.getElementById("modalTitle").textContent = "카테고리 추가";
+        document.getElementById("categoryForm").reset();
+        document.getElementById("categoryCode").disabled = false;
+        document.getElementById("categoryModal").classList.remove("hidden");
+        document.getElementById("categoryModal").classList.add("flex");
+      }
+
+      function hideModal() {
+        document.getElementById("categoryModal").classList.add("hidden");
+        document.getElementById("categoryModal").classList.remove("flex");
+      }
+
+      // 카테고리 폼 제출 처리
+      document
+        .getElementById("categoryForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          try {
+            const formData = {
+              code: document.getElementById("categoryCode").value.trim(),
+              name: document.getElementById("categoryName").value.trim(),
+              description: document
+                .getElementById("categoryDescription")
+                .value.trim(),
+              order:
+                parseInt(document.getElementById("categoryOrder").value) || 0,
+            };
+
+            // 기본 유효성 검사
+            if (!formData.code || !formData.name || !formData.description) {
+              alert("모든 필수 항목을 입력해주세요.");
+              return;
+            }
+
+            // 코드 형식 검사
+            if (!/^[a-zA-Z0-9_-]+$/.test(formData.code)) {
+              alert(
+                "카테고리 코드는 영문, 숫자, 하이픈(-), 언더스코어(_)만 사용할 수 있습니다."
+              );
+              return;
+            }
+
+            const response = await fetch(
+              "http://127.0.0.1:3000/api/categories",
+              {
+                method: "POST",
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem(
+                    "accessToken"
+                  )}`,
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+              }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+              throw new Error(
+                data.message || "카테고리 추가 중 오류가 발생했습니다."
+              );
+            }
+
+            alert("카테고리가 성공적으로 추가되었습니다.");
+            hideModal();
+            loadCategories(); // 목록 새로고침
+          } catch (err) {
+            console.error("카테고리 추가 실패:", err);
+            alert(err.message);
+          }
+        });
+
+      // 카테고리 상태 토글
+      async function toggleCategoryStatus(code, isActive) {
+        try {
+          const response = await fetch(
+            `http://127.0.0.1:3000/api/categories/${code}`,
+            {
+              method: "PUT",
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ isActive }),
+            }
+          );
+
+          if (response.ok) {
+            loadCategories();
+          } else {
+            const error = await response.json();
+            alert(error.message);
+          }
+        } catch (err) {
+          console.error("카테고리 상태 변경 실패:", err);
+          alert("카테고리 상태 변경 중 오류가 발생했습니다.");
+        }
+      }
+
+      // 팁 관리 섹션 관련 코드
+      document.getElementById("tipsBtn").addEventListener("click", () => {
+        showSection("tipsSection");
+        loadTips();
+      });
+
+      // 팁 목록 로드
+      async function loadTips() {
+        try {
+          const category = document.getElementById("tipCategoryFilter").value;
+          const url = category
+            ? `http://127.0.0.1:3000/api/tips?category=${category}`
+            : "http://127.0.0.1:3000/api/tips";
+
+          const response = await fetch(url, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+          });
+
+          const tips = await response.json();
+          displayTips(tips);
+        } catch (err) {
+          console.error("팁 목록 로드 실패:", err);
+        }
+      }
+
+      // 팁 목록 표시
+      function displayTips(tips) {
+        const tipsList = document.getElementById("tipsList");
+        tipsList.innerHTML = "";
+
+        tips.forEach((tip) => {
+          const card = document.createElement("div");
+          card.className =
+            "bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden";
+          card.innerHTML = `
+            <div class="p-4">
+              <div class="flex justify-between items-start">
+                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                  ${tip.category}
+                </span>
+                <div class="flex space-x-2">
+                  <button
+                    onclick="deleteTip('${tip._id}')"
+                    class="text-red-600 hover:text-red-900"
+                  >
+                    삭제
+                  </button>
+                </div>
+              </div>
+              <h3 class="mt-2 text-lg font-semibold text-gray-900">${
+                tip.title
+              }</h3>
+              <p class="mt-2 text-sm text-gray-600">${tip.content}</p>
+              ${
+                tip.imageUrl
+                  ? `
+                <img src="${tip.imageUrl}" alt="${tip.title}" class="mt-2 w-full h-40 object-cover rounded">
+              `
+                  : ""
+              }
+              <div class="mt-2 text-sm text-gray-500">순서: ${tip.order}</div>
+            </div>
+          `;
+          tipsList.appendChild(card);
+        });
+      }
+
+      // 모달 관련 함수들
+      function showAddTipModal() {
+        document.getElementById("tipModalTitle").textContent = "팁 추가";
+        document.getElementById("tipForm").reset();
+        document.getElementById("tipModal").classList.remove("hidden");
+        document.getElementById("tipModal").classList.add("flex");
+      }
+
+      function hideTipModal() {
+        document.getElementById("tipModal").classList.add("hidden");
+        document.getElementById("tipModal").classList.remove("flex");
+      }
+
+      // 팁 폼 제출 처리
+      document
+        .getElementById("tipForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const formData = {
+            category: document.getElementById("tipCategory").value,
+            title: document.getElementById("tipTitle").value,
+            content: document.getElementById("tipContent").value,
+            imageUrl: document.getElementById("tipImageUrl").value,
+            order: parseInt(document.getElementById("tipOrder").value),
+          };
+
+          try {
+            const response = await fetch("http://127.0.0.1:3000/api/tips", {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+              hideTipModal();
+              loadTips();
+            } else {
+              const error = await response.json();
+              alert(error.message);
+            }
+          } catch (err) {
+            console.error("팁 저장 실패:", err);
+            alert("팁 저장 중 오류가 발생했습니다.");
+          }
+        });
+
+      // 팁 삭제
+      async function deleteTip(tipId) {
+        if (!confirm("정말 이 팁을 삭제하시겠습니까?")) return;
+
+        try {
+          const response = await fetch(
+            `http://127.0.0.1:3000/api/tips/${tipId}`,
+            {
+              method: "DELETE",
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+              },
+            }
+          );
+
+          if (response.ok) {
+            loadTips();
+          } else {
+            const error = await response.json();
+            alert(error.message);
+          }
+        } catch (err) {
+          console.error("팁 삭제 실패:", err);
+          alert("팁 삭제 중 오류가 발생했습니다.");
+        }
+      }
+
+      // 카테고리 필터 변경 이벤트 리스너
+      document
+        .getElementById("tipCategoryFilter")
+        .addEventListener("change", loadTips);
+
+      // 비밀번호 초기화 함수
+      async function resetUserPassword(userId) {
+        if (!confirm("해당 사용자의 비밀번호를 초기화하시겠습니까?")) return;
+
+        try {
+          const response = await fetch(
+            `http://127.0.0.1:3000/api/users/${userId}/reset-password`,
+            {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          const data = await response.json();
+          if (response.ok) {
+            alert(
+              `초기화된 비밀번호: ${data.temporaryPassword}\n사용자에게 전달해주세요.`
+            );
+          } else {
+            alert(data.message);
+          }
+        } catch (err) {
+          console.error("비밀번호 초기화 실패:", err);
+          alert("비밀번호 초기화 중 오류가 발생했습니다.");
+        }
+      }
+
+      // 사용자 삭제 함수
+      async function deleteUser(userId) {
+        if (
+          !confirm(
+            "정말 이 사용자를 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다."
+          )
+        )
+          return;
+
+        try {
+          const response = await fetch(
+            `http://127.0.0.1:3000/api/users/${userId}`,
+            {
+              method: "DELETE",
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+              },
+            }
+          );
+
+          if (response.ok) {
+            loadUsers(); // 목록 새로고침
+          } else {
+            const error = await response.json();
+            alert(error.message);
+          }
+        } catch (err) {
+          console.error("사용자 삭제 실패:", err);
+          alert("사용자 삭제 중 오류가 발생했습니다.");
+        }
+      }
+
+      // 카테고리 삭제 함수 추가
+      async function deleteCategory(code) {
+        if (
+          !confirm(
+            "정말 이 카테고리를 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다."
+          )
+        ) {
+          return;
+        }
+
+        try {
+          const response = await fetch(
+            `http://127.0.0.1:3000/api/categories/${code}`,
+            {
+              method: "DELETE",
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+              },
+            }
+          );
+
+          const data = await response.json();
+
+          if (response.ok) {
+            alert("카테고리가 삭제되었습니다.");
+            loadCategories(); // 목록 새로고침
+          } else {
+            alert(data.message);
+          }
+        } catch (err) {
+          console.error("카테고리 삭제 실패:", err);
+          alert("카테고리 삭제 중 오류가 발생했습니다.");
+        }
+      }
+    </script>
+  </body>
+</html>

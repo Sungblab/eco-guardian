@@ -353,25 +353,25 @@
 
         // 토큰 체크 및 상태 업데이트
         const token = localStorage.getItem("accessToken");
+        const keepLoggedIn = localStorage.getItem("keepLoggedIn");
+        const isLoggedIn = sessionStorage.getItem("isLoggedIn");
 
-        if (token) {
-          // 로그인 상태일 때
+        // 로그인 체크 로직 수정
+        if (!token || (!keepLoggedIn === "true" && !isLoggedIn)) {
+          // 로그인되지 않은 경우 로그인 페이지로 리다이렉트
+          window.location.href = "login.html";
+          return;
+        }
+
+        // 로그인 상태일 때의 로직
+        await updateProgress();
+        await checkNotifications();
+
+        // 5분마다 진행률과 알림 상태 업데이트
+        setInterval(async () => {
           await updateProgress();
           await checkNotifications();
-
-          // 5분마다 진행률과 알림 상태 업데이트
-          setInterval(async () => {
-            await updateProgress();
-            await checkNotifications();
-          }, 300000);
-        } else {
-          // 로그아웃 상태일 때
-          // 진행률 카드 숨기기
-          const progressCard = document.querySelector("[class*='bg-white']");
-          if (progressCard) {
-            progressCard.style.display = "none";
-          }
-        }
+        }, 300000);
 
         // 카드 클릭 이벤트 설정
         setupCardClickEvents();
@@ -382,7 +382,7 @@
         try {
           const token = localStorage.getItem("accessToken");
           if (!token) {
-            console.warn("토큰이 없습니다.");
+            window.location.href = "login.html";
             return;
           }
 
@@ -874,7 +874,7 @@
           `;
         }
 
-        // 전체 통계 업데이트
+        // ��체 통계 업데이트
         const totalStats = document.getElementById("totalStats");
         if (totalStats) {
           totalStats.innerHTML = `

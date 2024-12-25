@@ -152,16 +152,22 @@
         try {
           const token = localStorage.getItem("accessToken");
           const [statsResponse, activitiesResponse] = await Promise.all([
-            fetch("http://127.0.0.1:3000/api/users/stats/me", {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }),
-            fetch("http://127.0.0.1:3000/api/activities?limit=5", {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }),
+            fetch(
+              "https://port-0-eco-guardian-backend-m53ifn0f2c0df751.sel4.cloudtype.app/api/users/stats/me",
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            ),
+            fetch(
+              "https://port-0-eco-guardian-backend-m53ifn0f2c0df751.sel4.cloudtype.app/api/activities?limit=5",
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            ),
           ]);
 
           if (!statsResponse.ok || !activitiesResponse.ok) {
@@ -270,7 +276,7 @@
 
             // 서버에 로그아웃 요청
             const response = await fetch(
-              "http://127.0.0.1:3000/api/auth/logout",
+              "https://port-0-eco-guardian-backend-m53ifn0f2c0df751.sel4.cloudtype.app/api/auth/logout",
               {
                 method: "POST",
                 headers: {
@@ -305,7 +311,7 @@
           }
 
           const response = await fetch(
-            "http://localhost:3000/api/notifications",
+            "https://port-0-eco-guardian-backend-m53ifn0f2c0df751.sel4.cloudtype.app/api/notifications",
             {
               headers: {
                 Authorization: `Bearer ${token}`,
